@@ -3,251 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <meta name="theme-color" content="#ff4766">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <link rel="manifest" href="data:application/manifest+json,{%22name%22:%22JEE%20DSN%20Tracker%22,%22short_name%22:%22Tracker%22,%22display%22:%22standalone%22,%22start_url%22:%22index.html%22,%22background_color%22:%22#0b0b15%22,%22theme_color%22:%22#ff4766%22,%22icons%22:[{%22src%22:%22https://cdn-icons-png.flaticon.com/512/3407/3407024.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}]}">
-
+    <link rel="manifest" href="manifest.json">
     <title>JEE DSN Tracker</title>
     <style>
-        :root {
-            --bg: #0b0b15;
-            --card-bg: #121225;
-            --input-bg: #1a1a30;
-            --accent: #ff4766;
-            --chem: #00d2ff;
-            --math: #9d50bb;
-            --text-main: #f1f5f9;
-            --text-dim: #94a3b8;
-        }
-
+        :root { --bg: #0b0b15; --card-bg: #121225; --input-bg: #1a1a30; --accent: #ff4766; --chem: #00d2ff; --math: #9d50bb; --text-main: #f1f5f9; --text-dim: #94a3b8; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background: var(--bg); color: var(--text-main); 
-            font-family: -apple-system, system-ui, sans-serif; 
-            padding: 20px; overscroll-behavior: contain; min-height: 100vh;
-        }
-
+        body { background: var(--bg); color: var(--text-main); font-family: -apple-system, system-ui, sans-serif; padding: 20px; overscroll-behavior: contain; min-height: 100vh; }
         .container { max-width: 480px; margin: 0 auto; }
-
         header { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
         .app-title { font-size: 26px; font-weight: 900; color: var(--accent); }
-        
         .backup-btns { display: flex; gap: 8px; }
         .btn-icon { background: #1a1a35; border: 1px solid #2d2d45; color: var(--text-dim); padding: 8px; border-radius: 10px; cursor: pointer; }
-
         .tabs { display: flex; background: #16162a; border-radius: 14px; padding: 6px; margin-bottom: 20px; border: 1px solid #1e1e38; }
-        .tab { 
-            flex: 1; padding: 12px 0; text-align: center; cursor: pointer; border-radius: 10px;
-            color: var(--text-dim); transition: 0.3s; font-size: 13px; font-weight: 700;
-        }
+        .tab { flex: 1; padding: 12px 0; text-align: center; cursor: pointer; border-radius: 10px; color: var(--text-dim); transition: 0.3s; font-size: 13px; font-weight: 700; }
         .tab.active { background: #1e1e38; color: #fff; }
         .tab[data-s="Physics"].active { color: var(--accent); }
         .tab[data-s="Chemistry"].active { color: var(--chem); }
         .tab[data-s="Maths"].active { color: var(--math); }
-
         .form-box { background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid #1e1e38; margin-bottom: 20px; }
         .form-tag { font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; font-weight: 800; margin-bottom: 15px; display: block; }
-        
         .input-group { display: flex; gap: 10px; margin-bottom: 12px; }
-        input, select { 
-            background: var(--input-bg); border: 1px solid #2d2d45; color: #fff; padding: 14px; 
-            border-radius: 12px; font-size: 15px; outline: none; width: 100%;
-        }
-
+        input, select { background: var(--input-bg); border: 1px solid #2d2d45; color: #fff; padding: 14px; border-radius: 12px; font-size: 15px; outline: none; width: 100%; }
         .btn-add { background: var(--accent); color: #fff; border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; flex-shrink: 0; min-width: 80px; }
-
         .view-bar { display: flex; gap: 12px; margin-bottom: 20px; }
-        .pill { 
-            background: #1a1a35; border: 1px solid #2d2d45; padding: 10px 18px; border-radius: 25px; 
-            font-size: 12px; color: var(--text-dim); cursor: pointer; font-weight: 600;
-        }
+        .pill { background: #1a1a35; border: 1px solid #2d2d45; padding: 10px 18px; border-radius: 25px; font-size: 12px; color: var(--text-dim); cursor: pointer; font-weight: 600; }
         .pill.active { background: var(--accent); color: white; border-color: var(--accent); }
-
-        .card { 
-            background: var(--card-bg); border-radius: 16px; padding: 18px; margin-bottom: 12px; 
-            display: flex; justify-content: space-between; align-items: center; border: 1px solid #1e1e38;
-        }
-        
+        .card { background: var(--card-bg); border-radius: 16px; padding: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #1e1e38; }
         .card-info h4 { font-size: 16px; margin-bottom: 6px; font-weight: 600; }
         .card-info p { font-size: 12px; color: var(--text-dim); }
-        
-        .check { 
-            width: 38px; height: 38px; border-radius: 50%; border: 2.5px solid #2d2d45; 
-            cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px;
-        }
+        .check { width: 38px; height: 38px; border-radius: 50%; border: 2.5px solid #2d2d45; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
         .check.done { background: #22c55e; border-color: #22c55e; color: white; }
-
         .empty { text-align: center; padding: 60px 0; color: #334; font-weight: 500; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <header>
-        <div class="app-title" id="main-title">JEE Tracker</div>
-        <div class="backup-btns">
-            <button class="btn-icon" onclick="exportData()">📤</button>
-            <button class="btn-icon" onclick="document.getElementById('f').click()">📥</button>
-            <input type="file" id="f" hidden onchange="importData(event)">
+    <div class="container">
+        <header><div class="app-title" id="main-title">JEE Tracker</div><div class="backup-btns"><button class="btn-icon" onclick="exportData()">📤</button><button class="btn-icon" onclick="document.getElementById('f').click()">📥</button><input type="file" id="f" hidden onchange="importData(event)"></div></header>
+        <div class="tabs"><div class="tab active" data-s="Physics" onclick="setTab('Physics')">Physics</div><div class="tab" data-s="Chemistry" onclick="setTab('Chemistry')">Chemistry</div><div class="tab" data-s="Maths" onclick="setTab('Maths')">Maths</div></div>
+        <div class="form-box">
+            <span class="form-tag" id="tag">+ New Physics Note</span>
+            <div class="input-group"><input type="text" id="title" placeholder="Topic name..."></div>
+            <div class="input-group"><input type="date" id="date"><select id="type" style="flex: 0.8;"><option value="exp">Daily Short Notes (2ⁿ⁻¹)</option><option value="sq">Short Notes (x²)</option></select><button class="btn-add" onclick="save()">Add</button></div>
         </div>
-    </header>
-
-    <div class="tabs">
-        <div class="tab active" data-s="Physics" onclick="setTab('Physics')">Physics</div>
-        <div class="tab" data-s="Chemistry" onclick="setTab('Chemistry')">Chemistry</div>
-        <div class="tab" data-s="Maths" onclick="setTab('Maths')">Maths</div>
+        <div class="view-bar"><div class="pill active" id="v-due" onclick="setView('due')">Due Today (0)</div><div class="pill" id="v-all" onclick="setView('all')">All Notes</div></div>
+        <div id="list"></div>
     </div>
-
-    <div class="form-box">
-        <span class="form-tag" id="tag">+ New Physics Note</span>
-        <div class="input-group">
-            <input type="text" id="title" placeholder="Topic name...">
-        </div>
-        <div class="input-group">
-            <input type="date" id="date">
-            <select id="type" style="flex: 0.8;">
-                <option value="exp">Daily Short Notes (2ⁿ⁻¹)</option>
-                <option value="sq">Short Notes (x²)</option>
-            </select>
-            <button class="btn-add" onclick="save()">Add</button>
-        </div>
-    </div>
-
-    <div class="view-bar">
-        <div class="pill active" id="v-due" onclick="setView('due')">Due Today (0)</div>
-        <div class="pill" id="v-all" onclick="setView('all')">All Notes</div>
-    </div>
-
-    <div id="list"></div>
-</div>
-
-<script>
-    // Empty Service Worker to trigger PWA installation
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIGZ1bmN0aW9uKGV2ZW50KSB7fSk7');
-    }
-
-    let notes = JSON.parse(localStorage.getItem('jee_v4_pwa')) || [];
-    let curSub = 'Physics';
-    let curView = 'due';
-
-    document.getElementById('date').value = new Date().toISOString().split('T')[0];
-
-    function setTab(s) {
-        curSub = s;
-        const colors = {Physics: '#ff4766', Chemistry: '#00d2ff', Maths: '#9d50bb'};
-        document.documentElement.style.setProperty('--accent', colors[s]);
-        document.getElementById('main-title').style.color = colors[s];
-        document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.s === s));
-        document.getElementById('tag').innerText = `+ New ${s} Note`;
-        render();
-    }
-
-    function setView(v) {
-        curView = v;
-        document.getElementById('v-due').classList.toggle('active', v === 'due');
-        document.getElementById('v-all').classList.toggle('active', v === 'all');
-        render();
-    }
-
-    function save() {
-        const t = document.getElementById('title').value;
-        const d = document.getElementById('date').value;
-        const ty = document.getElementById('type').value;
-        if(!t) return;
-        notes.push({ id: Date.now(), sub: curSub, title: t, start: d, type: ty, done: [] });
-        localStorage.setItem('jee_v4_pwa', JSON.stringify(notes));
-        document.getElementById('title').value = '';
-        render();
-    }
-
-    function getDates(n) {
-        let arr = [];
-        let s = new Date(n.start);
-        for(let x=1; x<=10; x++) {
-            let days = n.type === 'exp' ? Math.pow(2, x-1) : Math.pow(x, 2);
-            let rd = new Date(s);
-            rd.setDate(s.getDate() + days);
-            arr.push({ x, d: rd.toISOString().split('T')[0] });
+    <script>
+        // Real PWA Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
         }
-        return arr;
-    }
 
-    function render() {
-        const container = document.getElementById('list');
-        container.innerHTML = '';
-        const today = new Date().toISOString().split('T')[0];
-        let subNotes = notes.filter(n => n.sub === curSub);
-        let dueCount = 0;
-        subNotes.forEach(n => {
-            if(getDates(n).some(sd => sd.d === today && !n.done.includes(sd.x))) dueCount++;
-        });
-        document.getElementById('v-due').innerText = `Due Today (${dueCount})`;
-        let displayList = curView === 'due' ? 
-            subNotes.filter(n => getDates(n).some(sd => sd.d === today && !n.done.includes(sd.x))) : 
-            subNotes;
-        if(displayList.length === 0) {
-            container.innerHTML = `<div class="empty">No ${curSub} items.</div>`;
-            return;
-        }
-        displayList.reverse().forEach(n => {
-            const sched = getDates(n);
-            const todayRev = sched.find(sd => sd.d === today);
-            const isDone = todayRev ? n.done.includes(todayRev.x) : false;
-            const div = document.createElement('div');
-            div.className = 'card';
-            div.innerHTML = `
-                <div class="card-info">
-                    <h4>${n.title}</h4>
-                    <p>${n.type==='exp'?'Daily Short Notes':'Short Notes'} • Made: ${n.start} ${todayRev?'• <b>Rev x='+todayRev.x+'</b>':''}</p>
-                </div>
-                ${curView === 'due' ? 
-                    `<div class="check ${isDone?'done':''}" onclick="mark(${n.id}, ${todayRev.x})">${isDone?'✓':''}</div>` : 
-                    `<div onclick="del(${n.id})" style="color:#ff4766; font-size:11px; font-weight:bold;">DELETE</div>`}
-            `;
-            container.appendChild(div);
-        });
-    }
+        let notes = JSON.parse(localStorage.getItem('jee_final_pwa')) || [];
+        let curSub = 'Physics'; let curView = 'due';
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
 
-    function mark(id, x) {
-        const n = notes.find(i => i.id === id);
-        if(!n.done.includes(x)) n.done.push(x);
-        localStorage.setItem('jee_v4_pwa', JSON.stringify(notes));
-        render();
-    }
-
-    function del(id) {
-        if(confirm("Delete entry?")) {
-            notes = notes.filter(i => i.id !== id);
-            localStorage.setItem('jee_v4_pwa', JSON.stringify(notes));
+        function setTab(s) {
+            curSub = s;
+            const colors = {Physics: '#ff4766', Chemistry: '#00d2ff', Maths: '#9d50bb'};
+            document.documentElement.style.setProperty('--accent', colors[s]);
+            document.getElementById('main-title').style.color = colors[s];
+            document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.s === s));
+            document.getElementById('tag').innerText = `+ New ${s} Note`;
             render();
         }
-    }
 
-    function exportData() {
-        const blob = new Blob([JSON.stringify(notes)], {type:'application/json'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `JEE_Backup.json`;
-        a.click();
-    }
+        function setView(v) { curView = v; document.getElementById('v-due').classList.toggle('active', v === 'due'); document.getElementById('v-all').classList.toggle('active', v === 'all'); render(); }
 
-    function importData(e) {
-        const r = new FileReader();
-        r.onload = (ev) => {
-            notes = JSON.parse(ev.target.result);
-            localStorage.setItem('jee_v4_pwa', JSON.stringify(notes));
-            render();
-        };
-        r.readAsText(e.target.files[0]);
-    }
+        function save() {
+            const t = document.getElementById('title').value; const d = document.getElementById('date').value; const ty = document.getElementById('type').value;
+            if(!t) return;
+            notes.push({ id: Date.now(), sub: curSub, title: t, start: d, type: ty, done: [] });
+            localStorage.setItem('jee_final_pwa', JSON.stringify(notes));
+            document.getElementById('title').value = ''; render();
+        }
 
-    render();
-</script>
+        function getDates(n) {
+            let arr = []; let s = new Date(n.start);
+            for(let x=1; x<=10; x++) {
+                let days = n.type === 'exp' ? Math.pow(2, x-1) : Math.pow(x, 2);
+                let rd = new Date(s); rd.setDate(s.getDate() + days);
+                arr.push({ x, d: rd.toISOString().split('T')[0] });
+            }
+            return arr;
+        }
+
+        function render() {
+            const container = document.getElementById('list'); container.innerHTML = ''; const today = new Date().toISOString().split('T')[0];
+            let subNotes = notes.filter(n => n.sub === curSub); let dueCount = 0;
+            subNotes.forEach(n => { if(getDates(n).some(sd => sd.d === today && !n.done.includes(sd.x))) dueCount++; });
+            document.getElementById('v-due').innerText = `Due Today (${dueCount})`;
+            let displayList = curView === 'due' ? subNotes.filter(n => getDates(n).some(sd => sd.d === today && !n.done.includes(sd.x))) : subNotes;
+            if(displayList.length === 0) { container.innerHTML = `<div class="empty">No ${curSub} items.</div>`; return; }
+            displayList.reverse().forEach(n => {
+                const sched = getDates(n); const todayRev = sched.find(sd => sd.d === today); const isDone = todayRev ? n.done.includes(todayRev.x) : false;
+                const div = document.createElement('div'); div.className = 'card';
+                div.innerHTML = `<div class="card-info"><h4>${n.title}</h4><p>${n.type==='exp'?'Daily Short Notes':'Short Notes'} • Made: ${n.start} ${todayRev?'• <b>Rev x='+todayRev.x+'</b>':''}</p></div>${curView === 'due' ? `<div class="check ${isDone?'done':''}" onclick="mark(${n.id}, ${todayRev.x})">${isDone?'✓':''}</div>` : `<div onclick="del(${n.id})" style="color:#ff4766; font-size:11px; font-weight:bold;">DELETE</div>`}`;
+                container.appendChild(div);
+            });
+        }
+
+        function mark(id, x) { const n = notes.find(i => i.id === id); if(!n.done.includes(x)) n.done.push(x); localStorage.setItem('jee_final_pwa', JSON.stringify(notes)); render(); }
+        function del(id) { if(confirm("Delete entry?")) { notes = notes.filter(i => i.id !== id); localStorage.setItem('jee_final_pwa', JSON.stringify(notes)); render(); } }
+        function exportData() { const blob = new Blob([JSON.stringify(notes)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `JEE_Backup.json`; a.click(); }
+        function importData(e) { const r = new FileReader(); r.onload = (ev) => { notes = JSON.parse(ev.target.result); localStorage.setItem('jee_final_pwa', JSON.stringify(notes)); render(); }; r.readAsText(e.target.files[0]); }
+        render();
+    </script>
 </body>
 </html>
